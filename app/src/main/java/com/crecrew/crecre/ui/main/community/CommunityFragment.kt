@@ -1,12 +1,20 @@
 package com.crecrew.crecre.ui.main.community
 
 import android.os.Bundle
+import com.crecrew.crecre.BR
 import com.crecrew.crecre.R
 import com.crecrew.crecre.base.BaseFragment
+import com.crecrew.crecre.base.BasePagerAdapter
+import com.crecrew.crecre.base.BaseRecyclerViewAdapter
+import com.crecrew.crecre.data.model.board.Board
 import com.crecrew.crecre.databinding.FragCommunityBinding
+import com.crecrew.crecre.databinding.ItemBoardBinding
+import com.crecrew.crecre.ui.main.community.communityBoard.CommunityBoardFragment
+import com.crecrew.crecre.util.view.NonScrollLinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CommunityFragment : BaseFragment<FragCommunityBinding, CommunityViewModel>() {
+class CommunityFragment : BaseFragment<FragCommunityBinding, CommunityViewModel>(),
+    BaseRecyclerViewAdapter.OnItemClickListener {
 
     override val layoutResID: Int
         get() = R.layout.frag_community
@@ -15,6 +23,55 @@ class CommunityFragment : BaseFragment<FragCommunityBinding, CommunityViewModel>
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewDataBinding.vm = viewModel
+
+        setNewAndHotBoards()
+        setRecyclerView()
+    }
+
+    private fun setNewAndHotBoards() {
+        viewDataBinding.fragCommunityVp.adapter = BasePagerAdapter(childFragmentManager).apply {
+            addFragment(CommunityBoardFragment.newInstance(true))
+            addFragment(CommunityBoardFragment.newInstance(false))
+        }
+
+        viewDataBinding.fragCommunityTl.run {
+            setupWithViewPager(viewDataBinding.fragCommunityVp)
+
+            getTabAt(0)!!.text = "최신글"
+            getTabAt(1)!!.text = "인기글"
+        }
+    }
+
+    private fun setRecyclerView() {
+        viewDataBinding.fragCommunityRvLikedBoards.apply {
+            adapter =
+                object : BaseRecyclerViewAdapter<Board, ItemBoardBinding>() {
+                    override val layoutResID: Int
+                        get() = R.layout.item_board
+                    override val bindingVariableId: Int
+                        get() = BR.board
+                    override val listener: OnItemClickListener?
+                        get() = this@CommunityFragment
+                }
+            layoutManager = NonScrollLinearLayoutManager(activity!!)
+        }
+
+        viewDataBinding.fragCommunityRvUnlikedBoards.apply {
+            adapter =
+                object : BaseRecyclerViewAdapter<Board, ItemBoardBinding>() {
+                    override val layoutResID: Int
+                        get() = R.layout.item_board
+                    override val bindingVariableId: Int
+                        get() = BR.board
+                    override val listener: OnItemClickListener?
+                        get() = this@CommunityFragment
+                }
+            layoutManager = NonScrollLinearLayoutManager(activity!!)
+        }
+    }
+
+    override fun onItemClicked(item: Any?) {
+
     }
 
     companion object {

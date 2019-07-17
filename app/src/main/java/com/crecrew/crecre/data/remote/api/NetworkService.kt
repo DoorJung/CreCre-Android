@@ -7,6 +7,7 @@ import com.crecrew.crecre.data.model.posts.PostsResponse
 import com.crecrew.crecre.data.model.board.BoardResponse
 import com.crecrew.crecre.data.model.reply.ReplyResponse
 import com.google.gson.JsonObject
+import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -38,19 +39,19 @@ interface NetworkService {
     ) : Single<NullDataResponse>
     //방금 막 올라온 최신글 조회
     @GET("posts/todaynew")
-    fun getTodayNewPost(
+    fun getTodayNewPosts(
     ): Single<PostsResponse>
     //오늘뜨는 인기글 조회
     @GET("posts/todayhot")
-    fun getTodayHotPost(
+    fun getTodayHotPosts(
     ): Single<PostsResponse>
     //게시글 조회
     @GET("posts/new")
-    fun getCommunitySmallNewPosts(
+    fun getNewPosts(
     ): Single<PostsResponse>
     //인기글 조회
     @GET("posts/hot")
-    fun getCommunitySmallHotPosts(
+    fun getHotPosts(
     ): Single<PostsResponse>
     //최신글 전체 조회
     @GET("posts/allnew")
@@ -112,12 +113,12 @@ interface NetworkService {
     @GET("boards/unlike")
     fun getUnlikedBoards(
         @Header("token") token: String
-    ): Single<BoardResponse>
+    ): Observable<BoardResponse>
     //즐겨찾는 게시판
     @GET("boards/like")
     fun getLikedBoards(
         @Header("token") token: String
-    ): Single<BoardResponse>
+    ): Observable<BoardResponse>
     //게시판 검색했을 경우
     @GET("boards/search")
     fun searchBoards(

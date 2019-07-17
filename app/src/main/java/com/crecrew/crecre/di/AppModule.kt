@@ -1,9 +1,14 @@
 package com.crecrew.crecre.di
 
 import com.crecrew.crecre.data.local.pref.PreferenceManager
+import com.crecrew.crecre.data.model.board.BoardRepository
+import com.crecrew.crecre.data.model.board.BoardRepositoryImpl
+import com.crecrew.crecre.data.model.posts.PostRepository
+import com.crecrew.crecre.data.model.posts.PostRepositoryImpl
 import com.crecrew.crecre.data.remote.api.NetworkService
 import com.crecrew.crecre.ui.main.MainViewModel
 import com.crecrew.crecre.ui.main.community.CommunityViewModel
+import com.crecrew.crecre.ui.main.community.communityBoard.CommunityBoardViewModel
 import com.crecrew.crecre.ui.main.home.HomeViewModel
 import com.crecrew.crecre.ui.main.myPage.MyPageViewModel
 import com.crecrew.crecre.ui.main.rank.RankViewModel
@@ -29,7 +34,16 @@ val localModule = module {
 }
 
 val factoryModule = module {
-
+    factory<BoardRepository> {
+        BoardRepositoryImpl(
+            get(), get()
+        )
+    }
+    factory<PostRepository> {
+        PostRepositoryImpl(
+            get(), get()
+        )
+    }
 }
 
 val viewModule = module {
@@ -42,7 +56,8 @@ val viewModule = module {
     //Vote
     viewModel { VoteViewModel(get()) }
     //Community
-    viewModel { CommunityViewModel(get()) }
+    viewModel { CommunityViewModel(get(), get()) }
+    viewModel { CommunityBoardViewModel(get(), get()) }
     //MyPage
     viewModel { MyPageViewModel(get()) }
 }

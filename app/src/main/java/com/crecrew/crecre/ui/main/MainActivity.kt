@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager
 import com.crecrew.crecre.R
 import com.crecrew.crecre.base.BaseActivity
 import com.crecrew.crecre.base.BasePagerAdapter
+import com.crecrew.crecre.data.local.pref.PreferenceManager
 import com.crecrew.crecre.databinding.ActMainBinding
 import com.crecrew.crecre.ui.main.community.CommunityFragment
 import com.crecrew.crecre.ui.main.home.HomeFragment
@@ -25,6 +26,7 @@ class MainActivity : BaseActivity<ActMainBinding, MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        PreferenceManager(this).putPreference("TOKEN", getString(R.string.test_token))
         //dataBinding
         viewDataBinding.vm = viewModel
         //ui
