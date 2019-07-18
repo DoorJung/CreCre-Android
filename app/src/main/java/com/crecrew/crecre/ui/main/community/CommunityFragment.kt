@@ -1,6 +1,8 @@
 package com.crecrew.crecre.ui.main.community
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import com.crecrew.crecre.BR
 import com.crecrew.crecre.R
 import com.crecrew.crecre.base.BaseFragment
@@ -9,6 +11,7 @@ import com.crecrew.crecre.base.BaseRecyclerViewAdapter
 import com.crecrew.crecre.data.model.board.Board
 import com.crecrew.crecre.databinding.FragCommunityBinding
 import com.crecrew.crecre.databinding.ItemBoardBinding
+import com.crecrew.crecre.ui.main.community.board.BoardActivity
 import com.crecrew.crecre.ui.main.community.communityBoard.CommunityBoardFragment
 import com.crecrew.crecre.util.view.NonScrollLinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,12 +29,13 @@ class CommunityFragment : BaseFragment<FragCommunityBinding, CommunityViewModel>
 
         setNewAndHotBoards()
         setRecyclerView()
+        navigator()
     }
 
     private fun setNewAndHotBoards() {
         viewDataBinding.fragCommunityVp.adapter = BasePagerAdapter(childFragmentManager).apply {
-            addFragment(CommunityBoardFragment.newInstance(true))
-            addFragment(CommunityBoardFragment.newInstance(false))
+            addFragment(CommunityBoardFragment.newInstance(0))
+            addFragment(CommunityBoardFragment.newInstance(1))
         }
 
         viewDataBinding.fragCommunityTl.run {
@@ -70,8 +74,18 @@ class CommunityFragment : BaseFragment<FragCommunityBinding, CommunityViewModel>
         }
     }
 
-    override fun onItemClicked(item: Any?) {
+    private fun navigator() {
+        viewModel.activityToStart.observe(this, Observer { value ->
+            val intent = Intent(activity, value.first.java)
+            value.second?.let {
+                intent.putExtras(it)
+            }
+            startActivity(intent)
+        })
+    }
 
+    override fun onItemClicked(item: Any?) {
+        viewModel.navigate(BoardActivity::class, (item as Board).idx, item.name)
     }
 
     companion object {

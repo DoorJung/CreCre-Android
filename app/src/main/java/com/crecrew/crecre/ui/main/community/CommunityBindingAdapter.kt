@@ -1,5 +1,6 @@
 package com.crecrew.crecre.ui.main.community
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -18,5 +19,12 @@ fun setPostsDetailText(view: TextView, posts: Posts?) {
 fun setBoardLikeImg(view: ImageView, isLove: Int?) {
     isLove?.let {
         if(it == 1) view.setImageResource(R.drawable.icn_look_on) else view.setImageResource(R.drawable.icn_look_off)
+    }
+}
+
+@BindingAdapter("postsHotImg")
+fun setPostsHotImg(view: ImageView, hotImage: Int?) {
+    hotImage?.let {
+        if(it == 1) view.visibility = View.VISIBLE else view.visibility = View.GONE
     }
 }

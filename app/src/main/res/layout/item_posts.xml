@@ -36,23 +36,40 @@
 
         </androidx.cardview.widget.CardView>
 
-
-        <TextView
-                tools:text="제목"
-                android:text="@{posts.title}"
-                android:id="@+id/item_board_tv_title"
+        <LinearLayout
+                android:id="@+id/item_board_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:lineSpacingExtra="6sp"
-                android:fontFamily="@font/noto_sans_kr_medium"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="5dp"
                 app:layout_constraintStart_toEndOf="@+id/item_board_cv"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginStart="9dp"
                 app:layout_constraintVertical_chainStyle="packed"
-                app:layout_constraintBottom_toTopOf="@+id/item_board_tv_detail"/>
+                app:layout_constraintBottom_toTopOf="@+id/item_board_tv_detail">
+
+            <ImageView
+                    android:src="@drawable/ic_hot"
+                    android:id="@+id/item_board_iv_hot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    app:postsHotImg="@{posts.hot_image}"
+                    android:layout_marginEnd="3dp"/>
+
+            <TextView
+                    tools:text="제목"
+                    android:text="@{posts.title}"
+                    android:id="@+id/item_board_tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:lineSpacingExtra="6sp"
+                    android:fontFamily="@font/noto_sans_kr_medium"/>
+
+        </LinearLayout>
+
 
         <TextView
                 tools:text="추천 10 | 댓글 10 | 18:47 | 자유게시판"
@@ -64,9 +81,9 @@
                 android:textColor="#a4a4a4"
                 android:lineSpacingExtra="5sp"
                 android:fontFamily="@font/noto_sans_kr_medium"
-                android:layout_marginStart="9dp"
+                android:layout_marginStart="16dp"
                 app:layout_constraintStart_toEndOf="@+id/item_board_cv"
-                app:layout_constraintTop_toBottomOf="@+id/item_board_tv_title"
+                app:layout_constraintTop_toBottomOf="@+id/item_board_ll"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         <View

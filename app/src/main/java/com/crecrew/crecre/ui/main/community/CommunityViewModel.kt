@@ -19,10 +19,15 @@ class CommunityViewModel(
 
     private val _isProgress = MutableLiveData<Int>()
     val isProgress: LiveData<Int> get() = _isProgress
+
     private val _likedBoards = MutableLiveData<ArrayList<Board>>()
     val likedBoards: LiveData<ArrayList<Board>> get() = _likedBoards
+
     private val _unlikedBoards = MutableLiveData<ArrayList<Board>>()
     val unlikedBoards: LiveData<ArrayList<Board>> get() = _unlikedBoards
+
+    private val _activityToStart = MutableLiveData<Pair<KClass<*>, Bundle?>>()
+    val activityToStart: LiveData<Pair<KClass<*>, Bundle?>> get() = _activityToStart
 
     init {
         getLikedBoards()
@@ -61,6 +66,11 @@ class CommunityViewModel(
 
                 })
         )
+    }
+
+    fun navigate(activity: KClass<*>, boardIdx: Int, title: String) {
+        val bundle = Bundle().apply { putInt("boardIdx", boardIdx); putString("title", title) }
+        _activityToStart.postValue(Pair(activity, bundle))
     }
 
     private fun showProgress() {

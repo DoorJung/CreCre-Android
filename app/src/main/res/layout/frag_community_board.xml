@@ -26,6 +26,7 @@
                 app:replaceAll="@{vm.posts}"/>
 
         <LinearLayout
+                android:id="@+id/frag_community_board_ll_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

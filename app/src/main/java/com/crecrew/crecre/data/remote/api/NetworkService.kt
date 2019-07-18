@@ -55,22 +55,22 @@ interface NetworkService {
     ): Single<PostsResponse>
     //최신글 전체 조회
     @GET("posts/allnew")
-    fun getCommunityAllNewPosts(
-    ): Single<PostsResponse>
+    fun getAllNewPosts(
+    ): Observable<PostsResponse>
     //인기글 전체 조회
     @GET("posts/allhot")
-    fun getCommunityAllHotPosts(
-    ): Single<PostsResponse>
+    fun getAllHotPosts(
+    ): Observable<PostsResponse>
     //게시판 인기3개 나오는 통신
     @GET("posts/listhot/{boardIdx}")
-    fun getPostListBoards(
+    fun getHotPostsByBoardIdx(
         @Path("boardIdx") boardIdx : Int
-    ): Single<PostsResponse>
-    //게시판 게시글 리스트 보여주기
+    ): Observable<PostsResponse>
+    //게시판 게시글 리스트 보여주기 인기3개 나오는 통신이 3개 이하면 데이터 반환하지 않음
     @GET("posts/list/{boardIdx}")
-    fun getPostListAllBoards(
+    fun getPostsByBoardIdx(
         @Path("boardIdx") boardIdx : Int
-    ): Single<PostsResponse>
+    ): Observable<PostsResponse>
     //게시글 상세보기
     @GET("posts/detail/{postIdx}")
     fun getPostDetailPostIdx(

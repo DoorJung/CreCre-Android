@@ -15,6 +15,7 @@ data class Posts(
     val image_cnt: Int,
     val video_cnt: Int,
     val thumbnail_url: Any,
+    val hot_image: Int,
     val idx : Int,
     val name : String,
     val type : String,

@@ -8,6 +8,7 @@ import com.crecrew.crecre.data.model.posts.PostRepositoryImpl
 import com.crecrew.crecre.data.remote.api.NetworkService
 import com.crecrew.crecre.ui.main.MainViewModel
 import com.crecrew.crecre.ui.main.community.CommunityViewModel
+import com.crecrew.crecre.ui.main.community.board.BoardViewModel
 import com.crecrew.crecre.ui.main.community.communityBoard.CommunityBoardViewModel
 import com.crecrew.crecre.ui.main.home.HomeViewModel
 import com.crecrew.crecre.ui.main.myPage.MyPageViewModel
@@ -58,6 +59,7 @@ val viewModule = module {
     //Community
     viewModel { CommunityViewModel(get(), get()) }
     viewModel { CommunityBoardViewModel(get(), get()) }
+    viewModel { BoardViewModel(get(), get()) }
     //MyPage
     viewModel { MyPageViewModel(get()) }
 }
