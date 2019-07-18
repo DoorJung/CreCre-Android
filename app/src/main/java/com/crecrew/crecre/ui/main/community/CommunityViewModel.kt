@@ -10,6 +10,7 @@ import com.crecrew.crecre.data.model.board.Board
 import com.crecrew.crecre.data.model.board.BoardRepository
 import com.crecrew.crecre.util.scheduler.SchedulerProvider
 import io.reactivex.Observable
+import io.reactivex.Single
 import kotlin.reflect.KClass
 
 class CommunityViewModel(
@@ -20,30 +21,26 @@ class CommunityViewModel(
     private val _isProgress = MutableLiveData<Int>()
     val isProgress: LiveData<Int> get() = _isProgress
 
-    private val _likedBoards = MutableLiveData<ArrayList<Board>>()
-    val likedBoards: LiveData<ArrayList<Board>> get() = _likedBoards
-
-    private val _unlikedBoards = MutableLiveData<ArrayList<Board>>()
-    val unlikedBoards: LiveData<ArrayList<Board>> get() = _unlikedBoards
+    private val _boards = MutableLiveData<ArrayList<Board>>()
+    val boards: LiveData<ArrayList<Board>> get() = _boards
 
     private val _activityToStart = MutableLiveData<Pair<KClass<*>, Bundle?>>()
     val activityToStart: LiveData<Pair<KClass<*>, Bundle?>> get() = _activityToStart
 
     init {
-        getLikedBoards()
-        getUnlikedBoards()
+        getBoards()
     }
 
-    private fun getLikedBoards() {
+    fun getBoards() {
         addDisposable(
-            repository.getLikedBoards()
+            repository.getBoards()
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.mainThread())
                 .doOnSubscribe { showProgress() }
                 .doOnTerminate { hideProgress() }
                 .subscribe({
                     it.run {
-                        _likedBoards.postValue(this)
+                        _boards.postValue(this)
                     }
                 }, {
 
@@ -51,17 +48,21 @@ class CommunityViewModel(
         )
     }
 
-    private fun getUnlikedBoards() {
+    fun likeBoard(isLove: Int, boardIdx: Int) {
+        lateinit var repositoryLike: Single<Boolean>
+        if (isLove == 0)
+            repositoryLike = repository.likeBoard(boardIdx)
+        else
+            repositoryLike = repository.cancelLikeBoard(boardIdx)
         addDisposable(
-            repository.getUnlikedBoards()
+            repositoryLike
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.mainThread())
                 .doOnSubscribe { showProgress() }
                 .doOnTerminate { hideProgress() }
                 .subscribe({
-                    it.run {
-                        _unlikedBoards.postValue(this)
-                    }
+                    if(it)
+                        getBoards()
                 }, {
 
                 })

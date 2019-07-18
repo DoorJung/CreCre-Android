@@ -3,6 +3,8 @@ package com.crecrew.crecre.ui.main.community
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.crecrew.crecre.BR
 import com.crecrew.crecre.R
 import com.crecrew.crecre.base.BaseFragment
@@ -17,7 +19,7 @@ import com.crecrew.crecre.util.view.NonScrollLinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CommunityFragment : BaseFragment<FragCommunityBinding, CommunityViewModel>(),
-    BaseRecyclerViewAdapter.OnItemClickListener {
+    CommunityBoardRecyclerViewAdapter.OnItemClickListener {
 
     override val layoutResID: Int
         get() = R.layout.frag_community
@@ -47,30 +49,23 @@ class CommunityFragment : BaseFragment<FragCommunityBinding, CommunityViewModel>
     }
 
     private fun setRecyclerView() {
-        viewDataBinding.fragCommunityRvLikedBoards.apply {
-            adapter =
-                object : BaseRecyclerViewAdapter<Board, ItemBoardBinding>() {
-                    override val layoutResID: Int
-                        get() = R.layout.item_board
-                    override val bindingVariableId: Int
-                        get() = BR.board
-                    override val listener: OnItemClickListener?
-                        get() = this@CommunityFragment
-                }
-            layoutManager = NonScrollLinearLayoutManager(activity!!)
-        }
+        viewDataBinding.fragCommunityRvBoards.apply {
+            viewModel.boards.observe(this@CommunityFragment, Observer { value ->
+                if(adapter != null) {
+                    (viewDataBinding.fragCommunityRvBoards.adapter as CommunityBoardRecyclerViewAdapter).apply {
+                        replaceAll(value)
+                        notifyItemRangeChanged(0, value.size - 1)
+                    }
+                } else {
+                    adapter =
+                        CommunityBoardRecyclerViewAdapter(value)
+                            .apply { setOnItemClickListener(this@CommunityFragment) }
 
-        viewDataBinding.fragCommunityRvUnlikedBoards.apply {
-            adapter =
-                object : BaseRecyclerViewAdapter<Board, ItemBoardBinding>() {
-                    override val layoutResID: Int
-                        get() = R.layout.item_board
-                    override val bindingVariableId: Int
-                        get() = BR.board
-                    override val listener: OnItemClickListener?
-                        get() = this@CommunityFragment
+                    layoutManager = NonScrollLinearLayoutManager(activity!!)
+                    //(this.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
                 }
-            layoutManager = NonScrollLinearLayoutManager(activity!!)
+
+            })
         }
     }
 
@@ -84,8 +79,12 @@ class CommunityFragment : BaseFragment<FragCommunityBinding, CommunityViewModel>
         })
     }
 
-    override fun onItemClicked(item: Any?) {
+    override fun onItemClicked(item: Board) {
         viewModel.navigate(BoardActivity::class, (item as Board).idx, item.name)
+    }
+
+    override fun onLikeClicked(item: Board) {
+        viewModel.likeBoard(item.is_love, item.idx)
     }
 
     companion object {

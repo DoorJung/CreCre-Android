@@ -1,12 +1,15 @@
 package com.crecrew.crecre.ui.main.community
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.crecrew.crecre.R
 import com.crecrew.crecre.data.model.board.Board
+import com.crecrew.crecre.data.model.board.BoardRepository
 import com.crecrew.crecre.data.model.posts.Posts
+import com.crecrew.crecre.ui.main.community.communityBoard.CommunityBoardViewModel
 
 @BindingAdapter("postsDetailText")
 fun setPostsDetailText(view: TextView, posts: Posts?) {
@@ -26,5 +29,14 @@ fun setBoardLikeImg(view: ImageView, isLove: Int?) {
 fun setPostsHotImg(view: ImageView, hotImage: Int?) {
     hotImage?.let {
         if(it == 1) view.visibility = View.VISIBLE else view.visibility = View.GONE
+    }
+}
+
+@BindingAdapter("likeBoard")
+fun setLikeBoard(view: ImageView, hotImage: Int?) {
+    view.setOnClickListener {
+        hotImage?.let {
+            if(it == 1) view.setImageResource(R.drawable.icn_look_off) else view.setImageResource(R.drawable.icn_look_on)
+        }
     }
 }
